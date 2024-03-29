@@ -10,6 +10,12 @@ fake = Faker()
 # Conexión a Neo4j
 graph = Graph("neo4j+s://bead2851.databases.neo4j.io", auth=("neo4j", "ZQJ2jIyYXp3eZjy8AVDzVb9CxjiYzkNJTjkzjHRx440"))
 
+def generar_empleados_clientes(n, clientes):
+    empleados_clientes = random.sample(clientes, n)
+    for empleado_cliente in empleados_clientes:
+        empleado_cliente.update({"empleado_id": str(uuid4()), "fecha_contratacion": str(fake.date_between(start_date='-10y', end_date='today'))})
+    return empleados_clientes
+
 def cargar_nodos_desde_csv(nombre_archivo, etiqueta):
     with open(f"data/{nombre_archivo}", 'r', newline='', encoding='utf-8') as archivo:
         reader = csv.DictReader(archivo)
@@ -92,6 +98,12 @@ def cargar_datos_y_crear_relaciones():
     cargar_nodos_desde_csv('transacciones.csv', 'Transacción')
     cargar_nodos_desde_csv('bancos.csv', 'Banco')
     cargar_nodos_desde_csv('productos.csv', 'Producto')
+
+    clientes = list(graph.nodes.match("Cliente"))
+    empleados_clientes = generar_empleados_clientes(100, clientes)
+    for empleado_cliente in empleados_clientes:
+        empleado_cliente_nodo = Node("Cliente", "Empleado", **empleado_cliente)
+        graph.create(empleado_cliente_nodo)
 
     # Crear relaciones
     crear_relaciones()
