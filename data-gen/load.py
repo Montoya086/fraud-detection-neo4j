@@ -13,7 +13,7 @@ graph = Graph("neo4j+s://bead2851.databases.neo4j.io", auth=("neo4j", "ZQJ2jIyYX
 def generar_empleados_clientes(n, clientes):
     empleados_clientes = random.sample(clientes, n)
     for empleado_cliente in empleados_clientes:
-        empleado_cliente.update({"empleado_id": str(uuid4()), "fecha_contratacion": str(fake.date_between(start_date='-10y', end_date='today'))})
+        empleado_cliente.update({"empleado_id": str(uuid4()), "fecha_contratacion": fake.date_between(start_date='-10y', end_date='today')})
     return empleados_clientes
 
 def cargar_nodos_desde_csv(nombre_archivo, etiqueta):
@@ -22,6 +22,26 @@ def cargar_nodos_desde_csv(nombre_archivo, etiqueta):
         for fila in reader:
             if etiqueta == 'Cliente':
                 fila['numeros_alternativos'] = [fake.phone_number() for _ in range(random.randint(1, 3))]
+            
+            for key, value in fila.items():
+                if key == 'esPremium':
+                    fila[key] = True if value == 'True' else False
+                if key == 'calificacion':
+                    fila[key] = int(value)
+                if key == 'fechaCreacion':
+                    fila[key] = datetime.strptime(value, '%Y-%m-%d')
+                if key == 'saldo':
+                    fila[key] = float(value)
+                if key == 'fechaOferta':
+                    fila[key] = datetime.strptime(value, '%Y-%m-%d')
+                if key == 'limiteCredito':
+                    fila[key] = float(value)
+                if key == 'monto':
+                    fila[key] = float(value)
+                if key == 'fecha':
+                    fila[key] = datetime.strptime(value.split(" ")[0], '%Y-%m-%d')
+                if key == 'esFraudulenta':
+                    fila[key] = True if value == 'True' else False
             nodo = Node(etiqueta, **fila)
             graph.create(nodo)
 
@@ -36,52 +56,52 @@ def crear_relaciones():
     # Cliente-Tiene-Cuenta
     for cliente in clientes:
         cuenta_asociada = random.choice(cuentas)
-        rel = Relationship(cliente, "TIENE", cuenta_asociada, fecha_creacion=str(datetime.now()), relacion_id=str(uuid4()), detalle=fake.sentence())
+        rel = Relationship(cliente, "TIENE", cuenta_asociada, fecha_creacion=fake.date_between(start_date='-10y', end_date='today'), relacion_id=str(uuid4()), detalle=fake.sentence())
         graph.create(rel)
 
     # Transacción de una cuenta a otra
     for transaccion in transacciones:
         cuenta_origen = random.choice(cuentas)
         cuenta_destino = random.choice([c for c in cuentas if c != cuenta_origen])
-        rel_origen = Relationship(cuenta_origen, "REALIZA_TRANSACCION", transaccion, fecha_creacion=str(datetime.now()), relacion_id=str(uuid4()), detalle=fake.sentence())
-        rel_destino = Relationship(transaccion, "RECIBE_TRANSACCION", cuenta_destino, fecha_creacion=str(datetime.now()), relacion_id=str(uuid4()), detalle=fake.sentence())
+        rel_origen = Relationship(cuenta_origen, "REALIZA_TRANSACCION", transaccion, fecha_creacion=fake.date_between(start_date='-10y', end_date='today'), relacion_id=str(uuid4()), detalle=fake.sentence())
+        rel_destino = Relationship(transaccion, "RECIBE_TRANSACCION", cuenta_destino, fecha_creacion=fake.date_between(start_date='-10y', end_date='today'), relacion_id=str(uuid4()), detalle=fake.sentence())
         graph.create(rel_origen)
         graph.create(rel_destino)
 
     # Cliente-Usa-Producto
     for cliente in clientes:
         producto_usado = random.choice(productos)
-        rel = Relationship(cliente, "USA", producto_usado, fecha_creacion=str(datetime.now()), relacion_id=str(uuid4()), detalle=fake.sentence())
+        rel = Relationship(cliente, "USA", producto_usado, fecha_creacion=fake.date_between(start_date='-10y', end_date='today'), relacion_id=str(uuid4()), detalle=fake.sentence())
         graph.create(rel)
 
     # Banco-Gestiona-Cuenta
     for banco in bancos:
         cuenta_gestionada = random.choice(cuentas)
-        rel = Relationship(banco, "GESTIONA", cuenta_gestionada, fecha_creacion=str(datetime.now()), relacion_id=str(uuid4()), detalle=fake.sentence())
+        rel = Relationship(banco, "GESTIONA", cuenta_gestionada, fecha_creacion=fake.date_between(start_date='-10y', end_date='today'), relacion_id=str(uuid4()), detalle=fake.sentence())
         graph.create(rel)
 
     # Banco-Ofrece-Producto
     for banco in bancos:
         producto_ofrecido = random.choice(productos)
-        rel = Relationship(banco, "OFRECE", producto_ofrecido, fecha_creacion=str(datetime.now()), relacion_id=str(uuid4()), detalle=fake.sentence())
+        rel = Relationship(banco, "OFRECE", producto_ofrecido, fecha_creacion=fake.date_between(start_date='-10y', end_date='today'), relacion_id=str(uuid4()), detalle=fake.sentence())
         graph.create(rel)
 
     # Cliente-Pertenece-A-Banco
     for cliente in clientes:
         banco_perteneciente = random.choice(bancos)
-        rel = Relationship(cliente, "PERTENECE_A", banco_perteneciente, fecha_creacion=str(datetime.now()), relacion_id=str(uuid4()), detalle=fake.sentence())
+        rel = Relationship(cliente, "PERTENECE_A", banco_perteneciente, fecha_creacion=fake.date_between(start_date='-10y', end_date='today'), relacion_id=str(uuid4()), detalle=fake.sentence())
         graph.create(rel)
 
     # Transacción-Realizada-En-Banco
     for transaccion in transacciones:
         banco_realizador = random.choice(bancos)
-        rel = Relationship(transaccion, "REALIZADA_EN", banco_realizador, fecha_creacion=str(datetime.now()), relacion_id=str(uuid4()), detalle=fake.sentence())
+        rel = Relationship(transaccion, "REALIZADA_EN", banco_realizador, fecha_creacion=fake.date_between(start_date='-10y', end_date='today'), relacion_id=str(uuid4()), detalle=fake.sentence())
         graph.create(rel)
 
     # Producto-Vinculado-A-Cuenta
     for producto in productos:
         cuenta_vinculada = random.choice(cuentas)
-        rel = Relationship(producto, "VINCULADO_A", cuenta_vinculada, fecha_creacion=str(datetime.now()), relacion_id=str(uuid4()), detalle=fake.sentence())
+        rel = Relationship(producto, "VINCULADO_A", cuenta_vinculada, fecha_creacion=fake.date_between(start_date='-10y', end_date='today'), relacion_id=str(uuid4()), detalle=fake.sentence())
         graph.create(rel)
 
     # Cliente-Reporta-Transacción (como fraude)
@@ -89,7 +109,7 @@ def crear_relaciones():
         # Asumiendo que no todos los clientes reportan transacciones
         if random.choices([True, False], weights=[20, 80], k=1)[0]:
             transaccion_reportada = random.choice(transacciones)
-            rel = Relationship(cliente, "REPORTA", transaccion_reportada, fecha_creacion=str(datetime.now()), relacion_id=str(uuid4()), detalle="Transacción sospechosa reportada por el cliente")
+            rel = Relationship(cliente, "REPORTA", transaccion_reportada, fecha_creacion=fake.date_between(start_date='-10y', end_date='today'), relacion_id=str(uuid4()), detalle="Transacción sospechosa reportada por el cliente")
             graph.create(rel)
 
 
