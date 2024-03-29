@@ -20,6 +20,8 @@ def cargar_nodos_desde_csv(nombre_archivo, etiqueta):
     with open(f"data/{nombre_archivo}", 'r', newline='', encoding='utf-8') as archivo:
         reader = csv.DictReader(archivo)
         for fila in reader:
+            if etiqueta == 'Cliente':
+                fila['numeros_alternativos'] = [fake.phone_number() for _ in range(random.randint(1, 3))]
             nodo = Node(etiqueta, **fila)
             graph.create(nodo)
 
