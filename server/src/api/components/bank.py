@@ -62,3 +62,36 @@ def get_bank_action(bank_id: str):
             return {"message": "Bank not found", "status": 404, "data": {}}
     except Exception as e:
         return {"message": str(e), "status": 500, "data": {}}
+    
+
+def hire_bank_action(client_ids):
+    try:
+        clients_data = [{'client_id': client_id, 'id_empleado': str(uuid4())} for client_id in client_ids]
+
+        query = """
+        UNWIND $clients_data AS client_data
+        MATCH (client:Cliente {id: client_data.client_id})
+        SET client:Empleado,
+            client.fecha_contratacion = $fecha_contratacion,
+            client.empleado_id = client_data.id_empleado
+        """
+        graph.run(query, 
+                clients_data=clients_data, 
+                fecha_contratacion=datetime.now().strftime("%Y-%m-%d"))
+        return {"message": "Clients hired", "status": 200, "data": clients_data}
+    except Exception as e:
+        return {"message": str(e), "status": 500, "data": {}}
+    
+def fire_bank_action(worker_ids):
+    try:
+        query = """
+        UNWIND $worker_ids AS worker_id
+        MATCH (client:Empleado {empleado_id: worker_id})
+        REMOVE client:Empleado
+        SET client.fecha_contratacion = NULL,
+            client.id_empleado = NULL
+        """
+        graph.run(query, worker_ids=worker_ids)
+        return {"message": "Clients fired", "status": 200, "data": {}}
+    except Exception as e:
+        return {"message": str(e), "status": 500, "data": {}}

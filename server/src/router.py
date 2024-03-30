@@ -5,6 +5,7 @@ from src.api.routes.client_router import ClientRouter
 from src.api.routes.bank_router import BankRouter
 from src.api.routes.product_router import ProductRouter
 from src.api.routes.transaction_router import TransactionRouter
+from src.api.routes.relation_router import RelationRouter
 
 app = FastAPI()
 
@@ -23,6 +24,7 @@ app.include_router(ClientRouter)
 app.include_router(BankRouter)
 app.include_router(ProductRouter)
 app.include_router(TransactionRouter)
+app.include_router(RelationRouter)
 
 def run():
     return app

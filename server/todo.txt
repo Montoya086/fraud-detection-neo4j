@@ -1,0 +1,20 @@
+[X] Operación que realice consultas de nodos con base a determinados filtros y se muestre la información de las propiedades de estos
+[X] Consultar 1 nodo
+[X] Consultar muchos nodos
+[] Realizar consultas agregadas de datos 
+[X] Operación que permita agregar 1 o más propiedades a un nodo
+[X] Operación que permita agregar 1 o más propiedades a múltiples nodos al mismo tiempo
+[X] Operación que permita realizar la actualización de 1 o más propiedades de un nodo
+[X] Operación que permita realizar la actualización de 1 o más propiedades de múltiples nodos al mismo tiempo
+[X] Operación que permita eliminar 1 o mas propiedades de un nodo
+[X] Operación que permita eliminar 1 o más propiedades de múltiples nodos al mismo tiempo 
+[X] Operación que permita agregar 1 o más propiedades a una relación
+[X] Operación que permita agregar 1 o más propiedades a múltiples relaciones al mismo tiempo
+[X] Operación que permita realizar la actualización de 1 o más propiedades de la relación 
+[X] Operación que permita realizar la actualización de 1 o más propiedades de múltiples relaciones al mismo tiempo
+[X] Operación que permita eliminar 1 o más propiedades de una relación
+[X] Operación que permita eliminar 1 o más propiedades de múltiples relaciones al mismo tiempo
+[] Operación que permita eliminar 1 nodo
+[] Operación que permita eliminar múltiples nodos al mismo tiempo 
+[] Operación que permita eliminar 1 relación
+[] Operación que permita eliminar múltiples relaciones al mismo tiempo

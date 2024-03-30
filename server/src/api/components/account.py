@@ -15,6 +15,21 @@ password = os.getenv("NEO_PASSWORD")
 fake = Faker()
 graph = Graph(uri, auth=(user, password))
 
+def upgrade_account_action(request):
+    try:
+        account_numbers = request.account_numbers
+        is_premium = request.is_premium
+        
+        query = """
+        UNWIND $account_numbers AS account_number
+        MATCH (cuenta:Cuenta {numeroCuenta: account_number})
+        SET cuenta.esPremium = $is_premium
+        """
+        graph.run(query, account_numbers=account_numbers, is_premium=is_premium)
+        return {"message": "Accounts " + ("upgraded to premium!" if is_premium else "downgraded!")  , "status": 200, "data": account_numbers}
+    except Exception as e:
+        return {"message": str(e), "status": 500, "data": {}}
+
 def delete_account_action(account_number: str):
     try:
         query = """
