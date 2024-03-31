@@ -48,12 +48,17 @@ def get_account_by_number(account_number: str):
         RETURN cuenta, cliente, banco
         """
         result = graph.run(query, account_number=account_number).data()
-        
+        print(result)
         if result:
+            parsed_result = dict(result[0])
+            parsed_result["cuenta"] = dict(parsed_result["cuenta"])
+            parsed_result["cliente"] = dict(parsed_result["cliente"])
+            parsed_result["banco"] = dict(parsed_result["banco"])
+            parsed_result["cuenta"]["fechaCreacion"] = parsed_result["cuenta"]["fechaCreacion"].isoformat()
             return {
                 "message": "Account and associated client and bank data found",
                 "status": 200,
-                "data": result[0]  
+                "data": parsed_result  
             }
         else:
             return {"message": "Account not found", "status": 404, "data": {}}
@@ -63,7 +68,7 @@ def get_account_by_number(account_number: str):
 def create_account_action(request):
     try:
         account_id = str(uuid4())
-        fechaCreacion=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        fechaCreacion=datetime.now()
 
         account = Node("Cuenta", 
                     tipoCuenta=request.tipo, 
@@ -92,6 +97,7 @@ def create_account_action(request):
         saved_account = graph.nodes.match("Cuenta", id=account_id).first()
         if saved_account:
             account_data = dict(saved_account)
+            account_data['fechaCreacion'] = account_data['fechaCreacion'].isoformat()
 
             return {"message": "Account created", "status": 201, "data": account_data}
         else:

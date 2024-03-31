@@ -14,7 +14,7 @@
 [X] Operación que permita realizar la actualización de 1 o más propiedades de múltiples relaciones al mismo tiempo
 [X] Operación que permita eliminar 1 o más propiedades de una relación
 [X] Operación que permita eliminar 1 o más propiedades de múltiples relaciones al mismo tiempo
-[] Operación que permita eliminar 1 nodo
-[] Operación que permita eliminar múltiples nodos al mismo tiempo 
-[] Operación que permita eliminar 1 relación
-[] Operación que permita eliminar múltiples relaciones al mismo tiempo
+[X] Operación que permita eliminar 1 nodo
+[X] Operación que permita eliminar múltiples nodos al mismo tiempo 
+[X] Operación que permita eliminar 1 relación
+[X] Operación que permita eliminar múltiples relaciones al mismo tiempo
