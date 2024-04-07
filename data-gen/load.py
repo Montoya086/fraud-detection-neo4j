@@ -75,10 +75,15 @@ def crear_relaciones():
         graph.create(rel)
 
     # Banco-Gestiona-Cuenta
-    for banco in bancos:
-        cuenta_gestionada = random.choice(cuentas)
-        rel = Relationship(banco, "GESTIONA", cuenta_gestionada, fecha_creacion=fake.date_between(start_date='-10y', end_date='today'), relacion_id=str(uuid4()), detalle=fake.sentence())
+    banco_index = 0
+    for cuenta in cuentas:
+        banco = bancos[banco_index]
+        rel = Relationship(banco, "GESTIONA", cuenta, 
+                           fecha_creacion=fake.date_between(start_date='-10y', end_date='today'), 
+                           relacion_id=str(uuid4()), 
+                           detalle=fake.sentence())
         graph.create(rel)
+        banco_index = (banco_index + 1) % len(bancos)
 
     # Banco-Ofrece-Producto
     for banco in bancos:
