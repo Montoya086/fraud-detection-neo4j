@@ -16,6 +16,7 @@ password = os.getenv("NEO_PASSWORD")
 fake = Faker()
 graph = Graph(uri, auth=(user, password))
 
+
 def obtain_transactional_data():
     query = """
     MATCH (t:Transacción)
@@ -53,22 +54,41 @@ def prepare_new_transaction_data(transaction: Transaction):
     return df
 
 
-def evaluate_transaction_action(request: Transaction):
-    try:
-        df = obtain_transactional_data()
+class SingletonModel:
+    _instance = None
 
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super(SingletonModel, cls).__new__(cls)
+            cls._model = RandomForestClassifier() 
+            cls._train_model()
+        return cls._instance
+
+    @staticmethod
+    def _train_model():
+        df = obtain_transactional_data()  
+        
         df["etiqueta"] = df["etiqueta"].map({True: 1, False: 0})
         df["cuenta_tiene_dueño"] = df["cuenta_tiene_dueño"].map({True: 1, False: 0})
         df["tipo_cuenta"] = df["tipo_cuenta"].map({"Corriente": 0, "Ahorro": 1})
-        
+
         X = df.drop(['id_transaccion', 'etiqueta'], axis=1)
         y = df['etiqueta']
 
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        
+        SingletonModel._model.fit(X_train, y_train)  
 
-        model = RandomForestClassifier()
-        model.fit(X_train, y_train)
+    @staticmethod
+    def get_model():
+        return SingletonModel._model
 
+
+def evaluate_transaction_action(request: Transaction):
+    try:
+        modelInstance = SingletonModel()
+        model = modelInstance.get_model()
+        
         new_transaction_data = prepare_new_transaction_data(request)
         prediction = model.predict(new_transaction_data)
 
