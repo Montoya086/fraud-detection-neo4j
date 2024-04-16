@@ -44,15 +44,19 @@ def delete_account_action(account_number: str):
 def get_account_by_number(account_number: str):
     try:
         query = """
-        MATCH (banco)-[:GESTIONA]->(cuenta:Cuenta {numeroCuenta: $account_number})<-[:TIENE]-(cliente)
+        MATCH (banco)-[:GESTIONA]->(cuenta:Cuenta {numeroCuenta: $account_number})
+        OPTIONAL MATCH (cliente)-[:TIENE]->(cuenta)
         RETURN cuenta, cliente, banco
         """
         result = graph.run(query, account_number=account_number).data()
         print(result)
         if result:
             parsed_result = dict(result[0])
+            if parsed_result["cliente"] is None:
+                parsed_result["cliente"] = {}
+            else :
+                parsed_result["cliente"] = dict(parsed_result["cliente"])
             parsed_result["cuenta"] = dict(parsed_result["cuenta"])
-            parsed_result["cliente"] = dict(parsed_result["cliente"])
             parsed_result["banco"] = dict(parsed_result["banco"])
             parsed_result["cuenta"]["fechaCreacion"] = parsed_result["cuenta"]["fechaCreacion"].isoformat()
             return {
