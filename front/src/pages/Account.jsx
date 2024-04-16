@@ -22,7 +22,7 @@ const Account = () => {
         const payload = { tipo, saldo, bank_id: bankId, cliente_id: clienteId };
         try {
             const response = await axios.post('http://localhost:8001/bankpal/account', payload);
-            alert('Account Created: ' + JSON.stringify(response.data));
+            alert(' Your account has been successfully created. The Account Number is:  ' + JSON.stringify(response.data.data.numeroCuenta));
         } catch (error) {
             console.error('Error creating account:', error);
         }
@@ -50,7 +50,7 @@ const Account = () => {
         event.preventDefault();
         try {
             const response = await axios.delete(`http://localhost:8001/bankpal/account/${accountNumber}`);
-            alert('Account Deleted: ' + JSON.stringify(response.data));
+            alert('Account successfully deleted');
         } catch (error) {
             console.error('Error deleting account:', error);
         }
@@ -64,7 +64,7 @@ const Account = () => {
         };
         try {
             const response = await axios.post('http://localhost:8001/bankpal/account/upgrade', payload);
-            alert('Accounts Updated: ' + JSON.stringify(response.data.data));
+            alert(`Accounts Updated: ${response.data.data.join(', ')}`);
         } catch (error) {
             console.error('Error upgrading accounts:', error);
         }
@@ -97,7 +97,7 @@ const Account = () => {
                     <p><strong>Client Name:</strong> {accountDetails.cliente.nombre}</p>
                     <p><strong>Bank Name:</strong> {accountDetails.banco.nombre}</p>
                     <p><strong>Bank Rating:</strong> {accountDetails.banco.calificacion} stars</p>
-                    <p><strong>Is Premium:</strong> {accountDetails.cliente.esPremium ? 'Yes' : 'No'}</p>
+                    <p><strong>Is Premium:</strong> {accountDetails.cuenta.esPremium ? 'Yes' : 'No'}</p>
                 </div>
                 )}
                 {errorMessage && (
