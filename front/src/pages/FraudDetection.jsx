@@ -3,8 +3,10 @@ import './FraudDetection.css';
 
 function FraudDetectionPage() {
     const [transactionData, setTransactionData] = useState({
+        metodo: '',
+        monto: '',
         to_account_number: '',
-        monto: 0
+        from_account_number: ''
     });
     const [evaluationResult, setEvaluationResult] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -22,21 +24,26 @@ function FraudDetectionPage() {
         e.preventDefault();
         setLoading(true);
         setError('');
-        
-        // Verificar que el número de cuenta no esté vacío
-        if (!transactionData.to_account_number.trim()) {
-            setError('Please enter an account number.');
+
+        if (!transactionData.to_account_number.trim() || !transactionData.from_account_number.trim()) {
+            setError('Please enter all account numbers.');
             setLoading(false);
             return;
         }
-    
+
+        if (!transactionData.monto || transactionData.monto <= 0) {
+            setError('Please enter a valid amount.');
+            setLoading(false);
+            return;
+        }
+
         try {
             const response = await fetch('/api/evaluate-transaction', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ transaction: transactionData })
+                body: JSON.stringify(transactionData)
             });
             const data = await response.json();
             if (response.status === 200) {
@@ -45,7 +52,6 @@ function FraudDetectionPage() {
                 throw new Error(data.message || 'Unexpected error occurred');
             }
         } catch (e) {
-            // Manejo de errores cuando la respuesta no se puede procesar
             if (e.name === 'SyntaxError') {
                 setError('Failed to process the server response. Please try again later.');
             } else {
@@ -53,18 +59,18 @@ function FraudDetectionPage() {
             }
         }
         setLoading(false);
-    };    
+    };
 
     return (
         <div className="fraud-detection-container">
             <h1>Fraud Detection System</h1>
             <form onSubmit={handleSubmit} className="transaction-form">
                 <label>
-                    Account Number:
+                    Method:
                     <input
                         type="text"
-                        name="to_account_number"
-                        value={transactionData.to_account_number}
+                        name="metodo"
+                        value={transactionData.metodo}
                         onChange={handleChange}
                     />
                 </label>
@@ -74,6 +80,24 @@ function FraudDetectionPage() {
                         type="number"
                         name="monto"
                         value={transactionData.monto}
+                        onChange={handleChange}
+                    />
+                </label>
+                <label>
+                    To Account Number:
+                    <input
+                        type="text"
+                        name="to_account_number"
+                        value={transactionData.to_account_number}
+                        onChange={handleChange}
+                    />
+                </label>
+                <label>
+                    From Account Number:
+                    <input
+                        type="text"
+                        name="from_account_number"
+                        value={transactionData.from_account_number}
                         onChange={handleChange}
                     />
                 </label>
@@ -91,3 +115,4 @@ function FraudDetectionPage() {
 }
 
 export default FraudDetectionPage;
+
