@@ -40,3 +40,8 @@
 .read-the-docs {
   color: #888;
 }
+
+.cont {
+  margin-top: 60px; /* Ajusta este valor basado en la altura de tu navbar */
+}
+
