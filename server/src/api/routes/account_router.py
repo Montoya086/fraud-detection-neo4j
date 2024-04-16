@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from src.api.schemas.response import DefaultResponse
 from src.api.schemas.account import AccountCreationPayload, AccountsUpgradePayload
-from src.api.components.account import create_account_action, get_account_by_number, delete_account_action, upgrade_account_action
+from src.api.components.account import get_all_accounts, create_account_action, get_account_by_number, delete_account_action, upgrade_account_action
 
 AccountRouter = APIRouter(
     prefix="/bankpal/account",
@@ -23,3 +23,7 @@ async def delete_account(account_number: str):
 @AccountRouter.post("/upgrade", response_model=DefaultResponse)
 async def upgrade_account(request: AccountsUpgradePayload):
     return upgrade_account_action(request)
+
+@AccountRouter.get("/accounts", response_model=DefaultResponse)
+async def get_all_accounts_route():
+    return get_all_accounts()

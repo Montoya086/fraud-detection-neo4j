@@ -109,3 +109,29 @@ def create_account_action(request):
     except Exception as e:
         return {"message": str(e), "status": 500, "data": {}}
     
+def get_all_accounts():
+    try:
+        query = """
+        MATCH (cuenta:Cuenta)
+        OPTIONAL MATCH (cliente)-[:TIENE]->(cuenta)
+        OPTIONAL MATCH (banco)-[:GESTIONA]->(cuenta)
+        RETURN cuenta, collect(cliente) AS clientes, collect(banco) AS bancos
+        """
+        result = graph.run(query).data()
+        accounts = []
+        for record in result:
+            account_info = record["cuenta"]
+            clientes = [dict(cliente) for cliente in record["clientes"] if cliente]
+            bancos = [dict(banco) for banco in record["bancos"] if banco]
+            account_info["clientes"] = clientes
+            account_info["bancos"] = bancos
+            if "fechaCreacion" in account_info:
+                account_info["fechaCreacion"] = account_info["fechaCreacion"].isoformat()
+            accounts.append(account_info)
+        
+        if accounts:
+            return {"message": "All accounts retrieved successfully.", "status": 200, "data": accounts}
+        else:
+            return {"message": "No accounts found.", "status": 404, "data": []}
+    except Exception as e:
+        return {"message": str(e), "status": 500, "data": []}
