@@ -10,6 +10,8 @@ const Account = () => {
 
     // State for other actions
     const [accountNumber, setAccountNumber] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+    const [accountNumb, setAccountNumb] = useState('');
     const [accountDetails, setAccountDetails] = useState(null);
     const [accountNumbers, setAccountNumbers] = useState('');
     const [isPremium, setIsPremium] = useState(false);
@@ -19,8 +21,8 @@ const Account = () => {
         event.preventDefault();
         const payload = { tipo, saldo, bank_id: bankId, cliente_id: clienteId };
         try {
-            const response = await axios.post('http://localhost:8000/bankpal/account', payload);
-            alert('Account Created: ' + JSON.stringify(response.data));
+            const response = await axios.post('http://localhost:8001/bankpal/account', payload);
+            alert(' Your account has been successfully created. The Account Number is:  ' + JSON.stringify(response.data.data.numeroCuenta));
         } catch (error) {
             console.error('Error creating account:', error);
         }
@@ -29,19 +31,26 @@ const Account = () => {
     const handleGet = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.get(`http://localhost:8000/bankpal/account/${accountNumber}`);
-            setAccountDetails(response.data);
+            const response = await axios.get(`http://localhost:8001/bankpal/account/${accountNumber}`);
+            if (response.data.status === 404) {  // Assuming your backend sends 404 status for not found
+                setAccountDetails(null);
+                setErrorMessage('Account not found');
+            } else {
+                setAccountDetails(response.data.data);
+                setErrorMessage('');
+            }
         } catch (error) {
             console.error('Error fetching account:', error);
             setAccountDetails(null);
+            setErrorMessage('Failed to fetch account details. Please try again.');
         }
     };
 
     const handleDelete = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.delete(`http://localhost:8000/bankpal/account/${accountNumber}`);
-            alert('Account Deleted: ' + JSON.stringify(response.data));
+            const response = await axios.delete(`http://localhost:8001/bankpal/account/${accountNumber}`);
+            alert('Account successfully deleted');
         } catch (error) {
             console.error('Error deleting account:', error);
         }
@@ -54,8 +63,8 @@ const Account = () => {
             is_premium: isPremium
         };
         try {
-            const response = await axios.post('http://localhost:8000/bankpal/account/upgrade', payload);
-            alert('Accounts Updated: ' + JSON.stringify(response.data));
+            const response = await axios.post('http://localhost:8001/bankpal/account/upgrade', payload);
+            alert(`Accounts Updated: ${response.data.data.join(', ')}`);
         } catch (error) {
             console.error('Error upgrading accounts:', error);
         }
@@ -74,20 +83,33 @@ const Account = () => {
             </form>
 
             {/* Form for getting an account */}
-            <form onSubmit={handleGet}>
-                <h2>Get Account</h2>
-                <input type="text" placeholder="Account Number" value={accountNumber} onChange={e => setAccountNumber(e.target.value)} />
-                <button type="submit">Get Account</button>
-                {accountDetails && <div>
+            <div>
+                <form onSubmit={handleGet}>
+                    <h2>Get Account</h2>
+                    <input type="text" placeholder="Account Number" value={accountNumber} onChange={e => setAccountNumber(e.target.value)} />
+                    <button type="submit">Get Account</button>
+                </form>
+                {accountDetails && (
+                <div className="account-card">
                     <h3>Account Details:</h3>
-                    <pre>{JSON.stringify(accountDetails, null, 2)}</pre>
-                </div>}
-            </form>
-
+                    <p><strong>Account Type:</strong> {accountDetails.cuenta.tipoCuenta}</p>
+                    <p><strong>Balance:</strong> ${accountDetails.cuenta.saldo.toFixed(2)}</p>
+                    <p><strong>Client Name:</strong> {accountDetails.cliente.nombre}</p>
+                    <p><strong>Bank Name:</strong> {accountDetails.banco.nombre}</p>
+                    <p><strong>Bank Rating:</strong> {accountDetails.banco.calificacion} stars</p>
+                    <p><strong>Is Premium:</strong> {accountDetails.cuenta.esPremium ? 'Yes' : 'No'}</p>
+                </div>
+                )}
+                {errorMessage && (
+                    <div className="error-message">
+                        <p>{errorMessage}</p>
+                    </div>
+                )}
+            </div>
             {/* Form for deleting an account */}
             <form onSubmit={handleDelete}>
                 <h2>Delete Account</h2>
-                <input type="text" placeholder="Account Number" value={accountNumber} onChange={e => setAccountNumber(e.target.value)} />
+                <input type="text" placeholder="Account Number" value={accountNumb} onChange={e => setAccountNumb(e.target.value)} />
                 <button type="submit">Delete Account</button>
             </form>
 
