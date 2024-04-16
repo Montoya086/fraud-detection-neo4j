@@ -1,0 +1,42 @@
+.fraud-detection-container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.transaction-form label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.transaction-form input {
+    margin-left: 10px;
+    padding: 8px;
+    width: calc(100% - 22px);
+}
+
+.transaction-form button {
+    padding: 10px 20px;
+    margin-top: 20px;
+    background-color: #3f667e;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.transaction-form button:disabled {
+    background-color: #ccc;
+}
+
+.result-section {
+    margin-top: 20px;
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-left: 5px solid #28a745;
+}
+
+.error {
+    color: red;
+}
