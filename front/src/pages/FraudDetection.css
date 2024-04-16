@@ -26,6 +26,11 @@
     cursor: pointer;
 }
 
+
+button:hover {
+    background-color: #11364e;
+}
+
 .transaction-form button:disabled {
     background-color: #ccc;
 }

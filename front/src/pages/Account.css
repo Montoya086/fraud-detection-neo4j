@@ -1,0 +1,70 @@
+.account-container {
+    width: 80%;
+    min-height: 500px;  /* Ajusta esta medida según tus necesidades */
+    margin: 20px auto;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;  /* Esto asegura que todo el contenido extra se oculte */
+}
+
+form {
+    background-color: #626465;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 5px;
+}
+
+input[type="text"],
+input[type="number"] {
+    width: 100%;
+    padding: 8px;
+    margin: 10px 0;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+button {
+    padding: 10px 20px;
+    margin-top: 20px;
+    background-color: #3f667e;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #11364e;
+}
+
+/* Estilo para la tarjeta de detalles de la cuenta */
+.account-card {
+    background-color: #ffffff;
+    padding: 15px;
+    border-left: 5px solid #28a745;
+    margin-top: 10px;
+}
+
+.account-card p {
+    margin: 5px 0;
+    line-height: 1.5;
+}
+
+.tabs {
+    display: block !important;
+    margin-top: 20px;
+}
+
+/* Estilo para mensajes de error */
+.error-message {
+    color: red;
+    background-color: #ffc0cb;
+    padding: 10px;
+    border-left: 3px solid red;
+    margin-top: 10px;
+}
