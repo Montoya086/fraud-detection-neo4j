@@ -8,7 +8,7 @@ AccountRouter = APIRouter(
     tags=["account"]
 )
 
-@AccountRouter.get("/{account_number}", response_model=DefaultResponse)
+@AccountRouter.get("/number/{account_number}", response_model=DefaultResponse)
 async def get_account(account_number: str):
     return get_account_by_number(account_number)
 

@@ -118,6 +118,8 @@ def get_all_accounts():
         RETURN cuenta, collect(cliente) AS clientes, collect(banco) AS bancos
         """
         result = graph.run(query).data()
+        print("si")
+        print(result)
         accounts = []
         for record in result:
             account_info = record["cuenta"]

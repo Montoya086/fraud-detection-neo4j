@@ -34,7 +34,7 @@ const Account = () => {
     const handleGet = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.get(`http://localhost:8001/bankpal/account/${accountNumber}`);
+            const response = await axios.get(`http://localhost:8001/bankpal/account/number/${accountNumber}`);
             if (response.data.status === 404) {  // Assuming your backend sends 404 status for not found
                 setAccountDetails(null);
                 setErrorMessage('Account not found');

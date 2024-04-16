@@ -10,7 +10,8 @@ function AccountsGrid() {
         const fetchAccounts = async () => {
             setLoading(true);
             try {
-                const response = await axios.get('http://localhost:8001/bankpal/accounts');
+                const response = await axios.get('http://localhost:8001/bankpal/account/accounts');
+                console.log("response", response)
                 setAccounts(response.data.data);
             } catch (error) {
                 console.error('Error fetching accounts:', error);
