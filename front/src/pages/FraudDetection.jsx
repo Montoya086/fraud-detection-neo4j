@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import './FraudDetection.css';
+import axios from 'axios';
 
 function FraudDetectionPage() {
     const [transactionData, setTransactionData] = useState({
         metodo: '',
-        monto: '',
+        monto: 0,
         to_account_number: '',
         from_account_number: ''
     });
@@ -37,29 +38,28 @@ function FraudDetectionPage() {
             return;
         }
 
+        // Prepare payload
+        const payload = {
+            metodo: transactionData.metodo,
+            monto: transactionData.monto,
+            to_account_number: transactionData.to_account_number,
+            from_account_number: transactionData.from_account_number
+        };
+
         try {
-            const response = await fetch('/api/evaluate-transaction', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(transactionData)
-            });
-            const data = await response.json();
+            const response = await axios.post('http://localhost:8001/bankpal/transaction', payload);
             if (response.status === 200) {
-                setEvaluationResult(data.data);
+                setEvaluationResult(response.data.data);
             } else {
-                throw new Error(data.message || 'Unexpected error occurred');
+                throw new Error(response.data.message || 'Unexpected error occurred');
             }
         } catch (e) {
-            if (e.name === 'SyntaxError') {
-                setError('Failed to process the server response. Please try again later.');
-            } else {
-                setError(`Error: ${e.message}`);
-            }
+            setError(`Error: ${e.response?.data?.message || e.message}`);
         }
-        setLoading(false);
-    };
+        finally {
+            setLoading(false);
+        }
+}
 
     return (
         <div className="fraud-detection-container">
