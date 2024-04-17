@@ -12,9 +12,9 @@ ProductRouter = APIRouter(
 async def get_product(bank_id: str):
     return get_products_by_bank(bank_id)
 
-@ProductRouter.delete("/", response_model=DefaultResponse)
-async def delete_product(request: DeleteProductsPayload):
-    return delete_products_action(request)
+@ProductRouter.delete("/{product_id}", response_model=DefaultResponse)
+async def delete_product(product_id: str):
+    return delete_products_action(product_id)
 
 @ProductRouter.post("/", response_model=DefaultResponse)
 async def create_product(request: ProductCreationPayload):

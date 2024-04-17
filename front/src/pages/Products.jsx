@@ -10,7 +10,7 @@ const Products = () => {
     const [limiteCredito, setLimiteCredito] = useState('');
     const [condiciones, setCondiciones] = useState('');
     const [productBankId, setProductBankId] = useState('');
-    const [productIds, setProductIds] = useState('');
+    const [productId, setProductId] = useState('');
 
     // Existing handlers...
 
@@ -24,7 +24,7 @@ const Products = () => {
             bank_id: productBankId
         };
         try {
-            const response = await axios.post('http://localhost:8001/bankpal/product', payload);
+            const response = await axios.post('http://localhost:8001/bankpal/product/', payload);
             alert('Product created successfully: ' + JSON.stringify(response.data.data));
         } catch (error) {
             console.error('Error creating product:', error);
@@ -32,11 +32,10 @@ const Products = () => {
     };
 
     // Handler for deleting products
-    const handleDeleteProducts = async (event) => {
+    const handleDeleteProduct = async (event) => {
         event.preventDefault();
-        const payload = { product_ids: productIds.split(',').map(id => id.trim()) };
         try {
-            const response = await axios.post('http://localhost:8001/bankpal/product', payload);
+            const response = await axios.delete(`http://localhost:8001/bankpal/product/${productId}`);
             alert('Products deleted successfully');
         } catch (error) {
             console.error('Error deleting products:', error);
@@ -63,7 +62,7 @@ const Products = () => {
             <h1>Product Management</h1>
             <div className="tabs">
                 <button onClick={() => setActiveTab('createProduct')}>Create Product</button>
-                <button onClick={() => setActiveTab('deleteProducts')}>Delete Products</button>
+                <button onClick={() => setActiveTab('deleteProduct')}>Delete Products</button>
                 <button onClick={() => setActiveTab('getProducts')}>Get Products By Bank</button>
             </div>
 
@@ -78,11 +77,11 @@ const Products = () => {
                 </form>
             )}
 
-            {activeTab === 'deleteProducts' && (
-                <form onSubmit={handleDeleteProducts}>
-                    <h2>Delete Products</h2>
-                    <input type="text" placeholder="Product IDs (comma-separated)" value={productIds} onChange={e => setProductIds(e.target.value)} />
-                    <button type="submit">Delete Products</button>
+            {activeTab === 'deleteProduct' && (
+                <form onSubmit={handleDeleteProduct}>
+                    <h2>Delete Product</h2>
+                    <input type="text" placeholder="Product ID" value={productId} onChange={e => setProductId(e.target.value)} />
+                    <button type="submit">Delete Product</button>
                 </form>
             )}
 

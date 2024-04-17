@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 class DeleteProductsPayload(BaseModel):
-    product_ids: list[str]
+    product_ids: str
 
 class ProductCreationPayload(BaseModel):
     bank_id: str

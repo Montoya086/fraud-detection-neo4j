@@ -37,16 +37,15 @@ def create_product_action(request):
         return {"message": str(e), "status": 500, "data": {}}
 
 
-def delete_products_action(request):
+def delete_products_action(product_id: str):
     try:
-        product_ids = request.product_ids
         query = """
         UNWIND $product_ids AS product_id
-        MATCH (producto:Producto {id: product_id})
+        MATCH (producto:Producto {id: $product_id})
         DETACH DELETE producto
         """
-        graph.run(query, product_ids=product_ids)
-        return {"message": "Products deleted", "status": 200, "data": product_ids}
+        graph.run(query, product_ids=product_id)
+        return {"message": "Products deleted", "status": 200, "data": product_id}
     except Exception as e:
         return {"message": str(e), "status": 500, "data": {}}
 
