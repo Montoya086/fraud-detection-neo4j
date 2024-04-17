@@ -75,6 +75,7 @@ const Account = () => {
 
     return (
         <div className="account-container">
+            <h1>Account Management</h1>
             <div className="tabs">
                 <button onClick={() => setActiveTab('create')}>Create Account</button>
                 <button onClick={() => setActiveTab('get')}>Get Account</button>
