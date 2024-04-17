@@ -10,7 +10,7 @@
     margin-bottom: 10px;
 }
 
-.transaction-form input {
+.transaction-form input, select{
     margin-left: 10px;
     padding: 8px;
     width: calc(100% - 22px);

@@ -67,12 +67,16 @@ function FraudDetectionPage() {
             <form onSubmit={handleSubmit} className="transaction-form">
                 <label>
                     Method:
-                    <input
-                        type="text"
+                    <select
                         name="metodo"
                         value={transactionData.metodo}
                         onChange={handleChange}
-                    />
+                    >
+                        <option value="">Select Method</option>
+                        <option value="Efectivo">Efectivo</option>
+                        <option value="Tarjeta">Tarjeta de crédito/débito</option>
+                        <option value="Transferencia">Transferencia bancaria</option>
+                    </select>
                 </label>
                 <label>
                     Amount:

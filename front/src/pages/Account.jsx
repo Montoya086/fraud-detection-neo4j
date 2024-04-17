@@ -85,7 +85,11 @@ const Account = () => {
             {activeTab === 'create' && (
                 <form onSubmit={handleCreate}>
                     <h2>Create Account</h2>
-                    <input type="text" placeholder="Account Type" value={tipo} onChange={e => setTipo(e.target.value)} />
+                    <select value={tipo} onChange={e => setTipo(e.target.value)}>
+                        <option value="">Selecciona un tipo de cuenta</option>
+                        <option value="Ahorro">Ahorro</option>
+                        <option value="Corriente">Corriente</option>
+                    </select>
                     <input type="number" placeholder="Balance" value={saldo} onChange={e => setSaldo(e.target.value)} />
                     <input type="text" placeholder="Bank ID" value={bankId} onChange={e => setBankId(e.target.value)} />
                     <input type="text" placeholder="Client ID" value={clienteId} onChange={e => setClienteId(e.target.value)} />
