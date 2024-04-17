@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import './AllAccounts.css';
 
 function AccountsGrid() {
     const [currentPage, setCurrentPage] = useState(1);
-    const [accountsPerPage, setAccountsPerPage] = useState(15);
+    const [accountsPerPage, setAccountsPerPage] = useState(10);
     const [accounts, setAccounts] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -33,12 +34,13 @@ function AccountsGrid() {
     }, []);
 
     return (
-        <div>
+        <div  className="allaccounts-container">
             {loading ? <p>Loading accounts...</p> : (
                 <>
                     <table>
                         <thead>
                             <tr>
+                                <th>Account Name</th>
                                 <th>Account Type</th>
                                 <th>Balance</th>
                                 <th>Client Names</th>
@@ -48,6 +50,7 @@ function AccountsGrid() {
                         <tbody>
                             {currentAccounts.map(account => (
                                 <tr key={account.id}>
+                                    <td>{account.numeroCuenta}</td>
                                     <td>{account.tipoCuenta}</td>
                                     <td>${account.saldo}</td>
                                     <td>{account.clientes.map(client => client.nombre).join(", ")}</td>

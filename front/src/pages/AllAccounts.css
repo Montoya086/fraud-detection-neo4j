@@ -1,0 +1,46 @@
+.allaccounts-container {
+    width: 100%;
+    min-height: 500px;  /* Ajusta esta medida según tus necesidades */
+    margin: 20px auto;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;  /* Esto asegura que todo el contenido extra se oculte */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    text-align: left;
+    padding: 8px;
+}
+
+th {
+    background-color: transparent;
+}
+
+tr:nth-child(even) {
+    background-color: transparent;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 10px;
+    border: none;
+    background-color: #3f667e;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #11364e;
+}
+
+.error {
+    color: red;
+    font-weight: bold;
+}

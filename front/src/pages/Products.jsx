@@ -71,7 +71,7 @@ const Products = () => {
                     <h2>Create Product</h2>
                     <input type="text" placeholder="Product Type" value={tipo} onChange={e => setTipo(e.target.value)} />
                     <input type="number" placeholder="Credit Limit" value={limiteCredito} onChange={e => setLimiteCredito(e.target.value)} />
-                    <textarea placeholder="Conditions" value={condiciones} onChange={e => setCondiciones(e.target.value)} />
+                    <input type="text" placeholder="Conditions" value={condiciones} onChange={e => setCondiciones(e.target.value)} />
                     <input type="text" placeholder="Bank ID" value={productBankId} onChange={e => setProductBankId(e.target.value)} />
                     <button type="submit">Create Product</button>
                 </form>
