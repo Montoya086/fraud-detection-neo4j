@@ -6,6 +6,7 @@ import AccountsGrid from './pages/AllAccounts';
 import './App.css'
 import Navbar from './components/navbar';
 import Bank from './pages/Bank';
+import Products from './pages/Products';
 
 function App() {
 
@@ -18,7 +19,8 @@ function App() {
           <Route path="/create" element={< Account />} />
           <Route path="/fraud-detection" element={< FraudDetection />} />
           <Route path="/all-accounts" element={< AccountsGrid />} />
-          <Route path="/bank" element={< Bank />} />
+          <Route path="/banks" element={< Bank />} />
+          <Route path="/products" element={< Products />} />
         </Routes>
       </div>
     </div>
