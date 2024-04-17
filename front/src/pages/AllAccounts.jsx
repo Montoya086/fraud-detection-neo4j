@@ -2,9 +2,18 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 function AccountsGrid() {
+    const [currentPage, setCurrentPage] = useState(1);
+    const [accountsPerPage, setAccountsPerPage] = useState(15);
     const [accounts, setAccounts] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const indexOfLastAccount = currentPage * accountsPerPage;
+    const indexOfFirstAccount = indexOfLastAccount - accountsPerPage;
+    const currentAccounts = accounts.slice(indexOfFirstAccount, indexOfLastAccount);
+
+    const paginate = pageNumber => setCurrentPage(pageNumber);
+    const nextPage = () => setCurrentPage(prev => prev + 1);
+    const prevPage = () => setCurrentPage(prev => (prev - 1 > 0 ? prev - 1 : 1));
 
     useEffect(() => {
         const fetchAccounts = async () => {
@@ -26,26 +35,32 @@ function AccountsGrid() {
     return (
         <div>
             {loading ? <p>Loading accounts...</p> : (
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Account Type</th>
-                            <th>Balance</th>
-                            <th>Client Names</th>
-                            <th>Bank Names</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {accounts.map(account => (
-                            <tr key={account.id}>
-                                <td>{account.tipoCuenta}</td>
-                                <td>${account.saldo}</td>
-                                <td>{account.clientes.map(client => client.nombre).join(", ")}</td>
-                                <td>{account.bancos.map(bank => bank.nombre).join(", ")}</td>
+                <>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Account Type</th>
+                                <th>Balance</th>
+                                <th>Client Names</th>
+                                <th>Bank Names</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {currentAccounts.map(account => (
+                                <tr key={account.id}>
+                                    <td>{account.tipoCuenta}</td>
+                                    <td>${account.saldo}</td>
+                                    <td>{account.clientes.map(client => client.nombre).join(", ")}</td>
+                                    <td>{account.bancos.map(bank => bank.nombre).join(", ")}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                    <div>
+                        <button onClick={prevPage}>Prev</button>
+                        <button onClick={nextPage}>Next</button>
+                    </div>
+                </>
             )}
             {error && <p className="error">{error}</p>}
         </div>

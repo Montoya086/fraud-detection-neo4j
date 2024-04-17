@@ -13,7 +13,7 @@ const Bank = () => {
         event.preventDefault();
         try {
             const payload = { client_ids: clientIds.split(',').map(id => id.trim()) };
-            const response = await axios.post('http://localhost:8001/bankpal/hire', payload);
+            const response = await axios.post('http://localhost:8001/bankpal/bank/hire', payload);
             alert('Clients hired successfully');
         } catch (error) {
             console.error('Error hiring clients:', error);
@@ -24,7 +24,7 @@ const Bank = () => {
         event.preventDefault();
         try {
             const payload = { worker_ids: workerIds.split(',').map(id => id.trim()) };
-            const response = await axios.post('http://localhost:8001/bankpal/fire', payload);
+            const response = await axios.post('http://localhost:8001/bankpal/bank/fire', payload);
             alert('Workers fired successfully');
         } catch (error) {
             console.error('Error firing workers:', error);
