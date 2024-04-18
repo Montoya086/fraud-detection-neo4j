@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from src.api.schemas.response import DefaultResponse
-from src.api.schemas.account import AccountCreationPayload, AccountsUpgradePayload
+from src.api.schemas.account import AccountCreationPayload, AccountsUpgradePayload, GetAllAccountsPayload
 from src.api.components.account import get_all_accounts, create_account_action, get_account_by_number, delete_account_action, upgrade_account_action
 
 AccountRouter = APIRouter(
@@ -24,6 +24,6 @@ async def delete_account(account_number: str):
 async def upgrade_account(request: AccountsUpgradePayload):
     return upgrade_account_action(request)
 
-@AccountRouter.get("/accounts", response_model=DefaultResponse)
-async def get_all_accounts_route():
-    return get_all_accounts()
+@AccountRouter.post("/accounts")
+async def get_all_accounts_route(request: GetAllAccountsPayload):
+    return get_all_accounts(request)

@@ -1,4 +1,4 @@
-from src.api.schemas.account import AccountCreationPayload
+from src.api.schemas.account import AccountCreationPayload, GetAllAccountsPayload
 from py2neo import Node, Relationship, Graph
 from uuid import uuid4
 from datetime import datetime
@@ -109,17 +109,23 @@ def create_account_action(request):
     except Exception as e:
         return {"message": str(e), "status": 500, "data": {}}
     
-def get_all_accounts():
+def get_all_accounts(request: GetAllAccountsPayload):
     try:
-        query = """
-        MATCH (cuenta:Cuenta)
-        OPTIONAL MATCH (cliente)-[:TIENE]->(cuenta)
-        OPTIONAL MATCH (banco)-[:GESTIONA]->(cuenta)
-        RETURN cuenta, collect(cliente) AS clientes, collect(banco) AS bancos
-        """
+        if request.order_by == "date":
+            query = """
+            MATCH (cuenta:Cuenta)
+            OPTIONAL MATCH (cliente)-[:TIENE]->(cuenta)
+            OPTIONAL MATCH (banco)-[:GESTIONA]->(cuenta)
+            RETURN cuenta, collect(cliente) AS clientes, collect(banco) AS bancos, cuenta.fechaCreacion
+            ORDER BY cuenta.fechaCreacion """ + request.order.upper()
+        else:
+            query = """
+            MATCH (cuenta:Cuenta)
+            OPTIONAL MATCH (cliente)-[:TIENE]->(cuenta)
+            OPTIONAL MATCH (banco)-[:GESTIONA]->(cuenta)
+            RETURN cuenta, collect(cliente) AS clientes, collect(banco) AS bancos, cuenta.fechaCreacion
+            """
         result = graph.run(query).data()
-        print("si")
-        print(result)
         accounts = []
         for record in result:
             account_info = record["cuenta"]
