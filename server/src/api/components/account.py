@@ -118,6 +118,13 @@ def get_all_accounts(request: GetAllAccountsPayload):
             OPTIONAL MATCH (banco)-[:GESTIONA]->(cuenta)
             RETURN cuenta, collect(cliente) AS clientes, collect(banco) AS bancos, cuenta.fechaCreacion
             ORDER BY cuenta.fechaCreacion """ + request.order.upper()
+        if request.order_by == "balance":
+            query = """
+            MATCH (cuenta:Cuenta)
+            OPTIONAL MATCH (cliente)-[:TIENE]->(cuenta)
+            OPTIONAL MATCH (banco)-[:GESTIONA]->(cuenta)
+            RETURN cuenta, collect(cliente) AS clientes, collect(banco) AS bancos, cuenta.fechaCreacion
+            ORDER BY cuenta.saldo """ + request.order.upper()
         else:
             query = """
             MATCH (cuenta:Cuenta)

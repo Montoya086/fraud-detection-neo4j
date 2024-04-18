@@ -16,12 +16,19 @@ function AccountsGrid() {
     const nextPage = () => setCurrentPage(prev => prev + 1);
     const prevPage = () => setCurrentPage(prev => (prev - 1 > 0 ? prev - 1 : 1));
 
+    const [orderBy, setOrderBy] = useState('balance');
+    const [orderDirection, setOrderDirection] = useState('asc');
+
     useEffect(() => {
         const fetchAccounts = async () => {
+            const payload = {
+                order_by: orderBy,
+                order: orderDirection
+            };
             setLoading(true);
+            console.log(payload);
             try {
-                const response = await axios.get('http://localhost:8001/bankpal/account/accounts');
-                console.log("response", response)
+                const response = await axios.post('http://localhost:8001/bankpal/account/accounts', payload);
                 setAccounts(response.data.data);
             } catch (error) {
                 console.error('Error fetching accounts:', error);
@@ -29,12 +36,26 @@ function AccountsGrid() {
             }
             setLoading(false);
         };
-
+    
         fetchAccounts();
-    }, []);
+    }, [orderBy, orderDirection]);
 
     return (
         <div  className="allaccounts-container">
+            <div>
+            <label>Order By: </label>
+            <select value={orderBy} onChange={(e) => setOrderBy(e.target.value)}>
+                <option value="date">Date</option>
+                <option value="balance">Balance</option>
+            </select>
+
+            <label> Order Direction: </label>
+            <select value={orderDirection} onChange={(e) => setOrderDirection(e.target.value)}>
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+            </select>
+        </div>
+        
             {loading ? <p>Loading accounts...</p> : (
                 <>
                     <table>
@@ -44,6 +65,7 @@ function AccountsGrid() {
                                 <th>Account Type</th>
                                 <th>Balance</th>
                                 <th>Client Names</th>
+                                <th>Date</th>
                                 <th>Bank Names</th>
                             </tr>
                         </thead>
@@ -54,6 +76,7 @@ function AccountsGrid() {
                                     <td>{account.tipoCuenta}</td>
                                     <td>${account.saldo}</td>
                                     <td>{account.clientes.map(client => client.nombre).join(", ")}</td>
+                                    <td>{account.fechaCreacion}</td>
                                     <td>{account.bancos.map(bank => bank.nombre).join(", ")}</td>
                                 </tr>
                             ))}
@@ -65,7 +88,6 @@ function AccountsGrid() {
                     </div>
                 </>
             )}
-            {error && <p className="error">{error}</p>}
         </div>
     );
 }

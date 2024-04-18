@@ -13,18 +13,4 @@ class AccountsUpgradePayload(BaseModel):
 class GetAllAccountsPayload(BaseModel):
     order_by: str = "balance"
     order: str = "asc"
-
-    @validator('order_by')
-    def validate_sort(cls, v):
-        allowed = {'balance', 'date'}
-        if v.lower() not in allowed:
-            raise ValueError(f"Order by '{v}' is not allowed.")
-        return v
-    
-    @validator('order')
-    def validate_order(cls, v):
-        allowed = {'asc', 'desc'}
-        if v.lower() not in allowed:
-            raise ValueError(f"Order '{v}' is not allowed.")
-        return v
     
