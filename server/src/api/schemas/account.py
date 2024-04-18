@@ -11,12 +11,12 @@ class AccountsUpgradePayload(BaseModel):
     is_premium: bool
 
 class GetAllAccountsPayload(BaseModel):
-    order_by: str = "none"
+    order_by: str = "balance"
     order: str = "asc"
 
     @validator('order_by')
     def validate_sort(cls, v):
-        allowed = {'none', 'date'}
+        allowed = {'balance', 'date'}
         if v.lower() not in allowed:
             raise ValueError(f"Order by '{v}' is not allowed.")
         return v
