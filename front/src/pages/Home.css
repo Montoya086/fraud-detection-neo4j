@@ -1,0 +1,110 @@
+/* Variables */
+:root {
+  --side: 150px;
+  --l: 90px;
+  --num: 10;
+  --dur: 10s;
+  --perspective: 400px;
+}
+
+.home-container {
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  margin-bottom: 50%;
+}
+
+.title-container {
+  text-align: center;
+  padding: 20px 0;
+  /*background-color: rgba(0, 0, 0, 0.8);*/
+  z-index: 10; /* Asegura que esté sobre otros elementos si es necesario */
+}
+
+.view {/* Asegura que este bloque pueda ser controlado relativo a sus elementos internos */
+  z-index: 1; /* Menor z-index para estar debajo del título */
+}
+
+.plane.main {
+  margin-top: 20px; /* Añade un espacio arriba si es necesario para evitar la superposición */
+}
+
+
+/* Estilos generales */
+html, body {
+  background: #222;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.view {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  perspective: var(--perspective);
+  margin-top: 9%;
+}
+
+.plane {
+  width: var(--side);
+  height: var(--side);
+  transform-style: preserve-3d;
+}
+
+.plane.main {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  transform: rotateX(60deg) rotateZ(-30deg);
+  animation: rotate 20s infinite linear;
+}
+
+.circle {
+  width: var(--side);
+  height: var(--side);
+  position: absolute;
+  transform-style: preserve-3d;
+  border-radius: 100%;
+  box-shadow: 0 0 60px rgb(20, 193, 220), inset 0 0 60px rgba(20, 193, 220);
+}
+
+.circle::before, .circle::after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  width: 10%;
+  height: 10%;
+  border-radius: 100%;
+  background: rgb(20, 177, 220);
+  box-shadow: 0 0 60px 2px rgb(20, 200, 220);
+}
+
+.circle::before {
+  transform: translateZ(calc(-1 * var(--l)));
+}
+
+.circle::after {
+  transform: translateZ(var(--l));
+}
+
+@keyframes rotate {
+  from {
+    transform: rotateX(0) rotateY(0) rotateZ(0);
+  }
+  to {
+    transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg);
+  }
+}
