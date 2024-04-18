@@ -1,5 +1,5 @@
 import React from 'react';
-import './Home.css'; // Asegúrate de que el CSS se está cargando correctamente
+import './Home.css';
 
 const Home = () => {
   return (

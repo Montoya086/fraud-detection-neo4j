@@ -36,12 +36,116 @@ button:hover {
 }
 
 .result-section {
-    margin-top: 20px;
+    margin-top: 10px;
+    margin-bottom: 30px;
     background-color: #f8f9fa;
+    color: black;
     padding: 15px;
     border-left: 5px solid #28a745;
+    overflow: hidden;
 }
 
 .error {
     color: red;
 }
+
+.view-result {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    perspective: var(--perspective);
+    margin-top: 25%;
+  }
+  
+  .plane {
+    width: var(--side);
+    height: var(--side);
+    transform-style: preserve-3d;
+  }
+  
+  .plane.main {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    transform: rotateX(60deg) rotateZ(-30deg);
+    animation: rotate 20s infinite linear;
+  }
+  
+  .circle-green {
+    width: var(--side);
+    height: var(--side);
+    position: absolute;
+    transform-style: preserve-3d;
+    border-radius: 100%;
+    box-shadow: 0 0 60px rgb(20, 220, 30), inset 0 0 60px rgb(20, 220, 30);
+  }
+  
+  .circle-green::before, .circle-green::after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    width: 10%;
+    height: 10%;
+    border-radius: 100%;
+    background: rgb(17, 173, 25);
+    box-shadow: 0 0 60px 2px rgb(42, 216, 50);
+  }
+  
+  .circle-green::before {
+    transform: translateZ(calc(-1 * var(--l)));
+  }
+  
+  .circle-green::after {
+    transform: translateZ(var(--l));
+  }
+
+  .circle-red {
+    width: var(--side);
+    height: var(--side);
+    position: absolute;
+    transform-style: preserve-3d;
+    border-radius: 100%;
+    box-shadow: 0 0 60px rgb(193, 17, 17), inset 0 0 60px rgb(193, 17, 17);
+  }
+  
+  .circle-red::before, .circle-red::after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    width: 10%;
+    height: 10%;
+    border-radius: 100%;
+    background: rgb(212, 46, 46);
+    box-shadow: 0 0 60px 2px rgb(220, 20, 20);
+  }
+  
+  .circle-red::before {
+    transform: translateZ(calc(-1 * var(--l)));
+  }
+  
+  .circle::after {
+    transform: translateZ(var(--l));
+  }
+  
+  @keyframes rotate {
+    from {
+      transform: rotateX(0) rotateY(0) rotateZ(0);
+    }
+    to {
+      transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg);
+    }
+  }

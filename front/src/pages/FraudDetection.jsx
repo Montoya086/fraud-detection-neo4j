@@ -111,6 +111,13 @@ function FraudDetectionPage() {
                 <div className="result-section">
                     <h2>Results:</h2>
                     <p>{evaluationResult.is_fraudulent ? "This transaction is fraudulent." : "This transaction is not fraudulent."}</p>
+                    <div className="view-result">
+                        <div className="plane main">
+                        {Array.from({ length: 5 }, (_, i) => (
+                            <div key={i} className={evaluationResult.is_fraudulent ? "circle-red" :"circle-green"} style={{ transform: `rotateZ(${i / 5 * 360}deg) rotateX(63.435deg)` }} />
+                        ))}
+                    </div>
+      </div>
                 </div>
             )}
             {error && <p className="error">{error}</p>}
