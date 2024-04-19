@@ -5,5 +5,5 @@ class RelationUpdatePayload(BaseModel):
     relation_ids: list[str]
     details: Optional[str] = None
 
-class RelationUpdatePayload(BaseModel):
+class RelationDeletePayload(BaseModel):
     relation_ids: list[str]
